@@ -44,9 +44,9 @@ class GetSwitchbotDevices:
         devices = bleak.BleakScanner(
             # TODO: Find new UUIDs to filter on. For example, see
             # https://github.com/OpenWonderLabs/SwitchBotAPI-BLE/blob/4ad138bb09f0fbbfa41b152ca327a78c1d0b6ba9/devicetypes/meter.md
+            detection_callback=self.detection_callback,
             adapter=self._interface,
         )
-        devices.register_detection_callback(self.detection_callback)
 
         async with CONNECT_LOCK:
             await devices.start()
