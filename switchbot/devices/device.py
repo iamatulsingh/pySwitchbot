@@ -126,8 +126,8 @@ class SwitchbotBaseDevice:
     ) -> None:
         """Switchbot base class constructor."""
         self._interface = f"hci{interface}"
-        self._device = device
-        self._sb_adv_data: SwitchBotAdvertisement | None = None
+        self._device = device.device
+        self._sb_adv_data: SwitchBotAdvertisement | None = device
         self._override_adv_data: dict[str, Any] | None = None
         self._scan_timeout: int = kwargs.pop("scan_timeout", DEFAULT_SCAN_TIMEOUT)
         self._retry_count: int = kwargs.pop("retry_count", DEFAULT_RETRY_COUNT)
