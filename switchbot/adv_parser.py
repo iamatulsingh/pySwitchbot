@@ -56,6 +56,8 @@ SUPPORTED_TYPES: dict[str, SwitchbotSupportedType] = {
         "func": process_wohand,
         "service_uuids": {"cba20d00-224d-11e6-9fb8-0002a5d5c51b"},
         "manufacturer_id": 89,
+        "manufacturer_data_length": 6,
+        "default_service_data": b'H@X',
     },
     "s": {
         "modelName": SwitchbotModel.MOTION_SENSOR,
@@ -142,6 +144,8 @@ SUPPORTED_TYPES: dict[str, SwitchbotSupportedType] = {
         "modelFriendlyName": "Lock",
         "func": process_wolock,
         "manufacturer_id": 2409,
+        "manufacturer_data_length": 10,
+        "default_service_data": b'o\x80d',
     },
     "x": {
         "modelName": SwitchbotModel.BLIND_TILT,
@@ -228,12 +232,14 @@ def _parse_data(
         for model_chr, model_data in MODELS_BY_MANUFACTURER_DATA[_mfr_id]:
             if model_data.get("manufacturer_data_length") == len(_mfr_data):
                 _model = model_chr
+                if _service_data is None:
+                    _service_data = model_data.get("default_service_data", None)
                 break
 
     if not _model:
         return None
 
-    _isEncrypted = bool(_service_data[0] & 0b10000000) if _service_data else False
+    _isEncrypted = bool(_service_data[1] & 0b10000000) if _service_data else False
     data = {
         "rawAdvData": _service_data,
         "data": {},
