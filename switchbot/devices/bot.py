@@ -120,3 +120,24 @@ class Switchbot(SwitchbotDeviceOverrideStateDuringConnection):
         if self._inverse:
             return not value
         return value
+
+    def battery(self) -> bool | None:
+        """Return switch battery state."""
+        value = self._get_adv_value("battery")
+        if value is None:
+            return None
+
+        if self._inverse:
+            return not value
+        return value
+
+    def is_switch_mode(self) -> bool | None:
+        """Return switch mode"""
+        # To get actual position call update() first.
+        value = self._get_adv_value("switchMode")
+        if value is None:
+            return None
+
+        if self._inverse:
+            return not value
+        return value
